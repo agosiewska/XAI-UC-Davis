@@ -55,12 +55,18 @@ fifa_feat <- ingredients::feature_importance(fifa_gbm_exp)
 plot(fifa_feat, max_vars = 12)
 
 
+
+
 # Partial Dependency explainer
 ## Calculate Partial Dependency explainer.
 
 fifa19_pd <- ingredients::partial_dependency(fifa_gbm_exp, variables = "Age")
 plot(fifa19_pd)
 
+library("ggplot2")
+library("scales")
+plot(fifa19_pd) +  
+  scale_y_continuous(labels = dollar_format(suffix = "€", prefix = ""), name = "Estimated value", limits = 1000000*c(0.1,3), breaks = 1000000*c(0.1,1,2, 3))
 
 
 # Break Down explainer
@@ -71,8 +77,6 @@ fifa_cr_gbm <- break_down(fifa_gbm_exp, new_observation = fifa19_selected["Crist
 plot(fifa_cr_gbm)
 
 fifa_cr_gbm$label = "Break Down for Cristiano Ronaldo (GBM model)"
-library("ggplot2")
-library("scales")
 plot(fifa_cr_gbm, digits = 0) +  
   scale_y_continuous(labels = dollar_format(suffix = "€", prefix = ""), name = "Estimated value", limits = 10000000*c(0.1,10), breaks = 10000000*c(2.5,5,7.5,10))
 
